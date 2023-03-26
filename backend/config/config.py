@@ -54,7 +54,7 @@ class DatabaseConfig:
         self.password = os.getenv("POSTGRES_PASSWORD")
         self.host = os.getenv("POSTGRES_HOST")
         self.port = os.getenv("POSTGRES_PORT")
-        self.db = os.getenv("POSTGRES_DATABASE")
+        self.db = os.getenv("POSTGRES_DB")
         self.url = f"postgres+asyncpg://{self.user}:{self.password}@" \
                    f"{self.host}:{self.port}/{self.db}"
 

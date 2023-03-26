@@ -11,6 +11,16 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+  database:
+    image: postgres:${POSTGRES_VERSION:-15}
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-tg_bot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+    ports:
+      - "5432:5432"
+  #    volumes:
+  #      - db-data:/var/lib/postgresql/data:rw
 #  poller:
 #    build: ./poller
 #    depends_on:
