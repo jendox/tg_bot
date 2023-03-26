@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import List
 
 from typing_extensions import NewType
 
@@ -11,4 +12,4 @@ QuestionID = NewType("QuestionID", int)
 class Question:
     id: QuestionID
     title: str
-    answer: Answer
+    answers: List[Answer] = field(default_factory=List)

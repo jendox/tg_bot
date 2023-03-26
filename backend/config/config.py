@@ -55,7 +55,7 @@ class DatabaseConfig:
         self.host = os.getenv("POSTGRES_HOST")
         self.port = os.getenv("POSTGRES_PORT")
         self.db = os.getenv("POSTGRES_DB")
-        self.url = f"postgres+asyncpg://{self.user}:{self.password}@" \
+        self.url = f"postgresql+asyncpg://{self.user}:{self.password}@" \
                    f"{self.host}:{self.port}/{self.db}"
 
 
@@ -73,9 +73,21 @@ class AdminConfig:
 
 
 @dataclass(slots=True)
+class SessionConfig:
+    key: str = field(init=False)
+
+    def __post_init__(self):
+        self._read_config()
+
+    def _read_config(self):
+        self.key = os.getenv("SESSION_KEY")
+
+
+@dataclass(slots=True)
 class AppConfig:
     bot: BotConfig = field(init=False, default_factory=BotConfig)
     rabbit: RabbitConfig = field(init=False, default_factory=RabbitConfig)
     db: DatabaseConfig = field(init=False, default_factory=DatabaseConfig)
     admin: AdminConfig = field(init=False, default_factory=AdminConfig)
+    session: SessionConfig = field(init=False, default_factory=SessionConfig)
 

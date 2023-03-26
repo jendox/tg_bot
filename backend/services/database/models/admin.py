@@ -8,5 +8,5 @@ class Admin(db, AdminEntity):
     __tablename__ = "admins"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(unique=True)
-    password: Mapped[str] = mapped_column()
+    email: Mapped[str] = mapped_column(unique=True, nullable=False)
+    password: Mapped[str] = mapped_column(nullable=False)
