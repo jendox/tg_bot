@@ -1,0 +1,4 @@
+aiohttp==3.8.4
+aio-pika==9.0.5
+black==23.1.0
+PyYAML==6.0
