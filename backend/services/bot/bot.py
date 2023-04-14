@@ -3,7 +3,10 @@ from typing import Optional
 
 import aiohttp
 
+from backend.services.bot.commands import BotCommand
+from backend.services.bot.game.handler import GameHandler
 from backend.services.bot.tg_models import Update, Message, User, Chat
+from backend.services.database.database.base import Database
 
 
 class Bot:
@@ -11,26 +14,44 @@ class Bot:
             self,
             token: str,
             session: aiohttp.ClientSession,
+            database: Database
     ):
         self._token = token
         self._api_url = f"https://api.telegram.org/bot{self._token}"
         self._session = session
+        self._database = database
+        self._handler = GameHandler(self)
+        self._command = BotCommand(
+            ["/start", "/game", "/join@KtsCourseBot", "/stat", "/stop"]
+        )
+
+    @property
+    def database(self):
+        return self._database
 
     async def stop(self):
         await self._session.close()
 
     async def handle_update(self, update: Update):
         print(update)
-        # raise NotImplementedError
+        if command := self._command.parse_command(update):
+            await self._handler.run_command(command=command, update=update)
 
-    async def send_message(self, chat_id: int, text: str, reply_markup: Optional[dict] = None) -> Message:
+    async def send_message(
+            self,
+            chat_id: int,
+            text: str,
+            reply_markup: Optional[dict] = None,
+            parse_mode: str = "HTML"
+    ) -> Message:
         url = f"{self._api_url}/sendMessage"
         params = {
             "chat_id": chat_id,
-            "text": text
+            "text": text,
+            "parse_mode": parse_mode,
         }
         if reply_markup:
-            params["reply_markup"] = reply_markup
+            params["reply_markup"] = json.dumps(reply_markup)
 
         async with self._session.get(url=url, params=params) as resp:
             resp.raise_for_status()
@@ -44,7 +65,7 @@ class Bot:
             data = await resp.text()
             return User(**json.loads(data)["result"])
 
-    async def get_chat(self, chat_id: int):
+    async def get_chat(self, chat_id: int) -> Chat:
         url = f"{self._api_url}/getChat"
         params = {
             "chat_id": chat_id

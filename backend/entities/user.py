@@ -1,11 +1,16 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from typing_extensions import NewType
 
-UserID = NewType("UserID", int)
+
+UserId = NewType("UserId", int)
 
 
 @dataclass
 class User:
-    id: UserID
-    name: str
+    id: UserId
+    is_bot: bool
+    first_name: str
+    username: str
+    last_name: Optional[str] = None

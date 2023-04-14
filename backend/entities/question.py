@@ -5,11 +5,11 @@ from typing_extensions import NewType
 
 from backend.entities.answer import Answer
 
-QuestionID = NewType("QuestionID", int)
+QuestionId = NewType("QuestionId", int)
 
 
 @dataclass
 class Question:
-    id: QuestionID
+    id: QuestionId
     title: str
     answers: List[Answer] = field(default_factory=List)

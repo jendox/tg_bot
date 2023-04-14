@@ -1,18 +1,16 @@
-from dataclasses import dataclass, field
-from typing import Optional, List, Any
+from pydantic import BaseModel, Field
+from typing import Optional, Any, List
 
 
-@dataclass
-class User:
+class User(BaseModel):
     id: int
     is_bot: bool
     first_name: str
     last_name: Optional[str]
-    username: str
+    username: Optional[str]
 
 
-@dataclass
-class Chat:
+class Chat(BaseModel):
     id: int
     type: str
     title: Optional[str]
@@ -22,17 +20,15 @@ class Chat:
     pinned_message: Optional["Message"]
 
 
-@dataclass
-class MessageEntity:
+class MessageEntity(BaseModel):
     type: str
     offset: int
     length: int
 
 
-@dataclass
-class Message:
+class Message(BaseModel):
     message_id: int
-    from_: Optional[User] = field(metadata={"name": "from"})
+    from_: Optional[User] = Field(alias="from")
     date: int
     chat: Chat
     text: Optional[str] = None
@@ -40,28 +36,24 @@ class Message:
     entities: Optional[List[MessageEntity]] = None
 
 
-@dataclass
-class CallbackQuery:
+class CallbackQuery(BaseModel):
     id: int
     data: str
-    from_: Optional[User] = field(metadata={"name": "from"})
+    from_: Optional[User] = Field(alias="from")
     message: Optional[Message]
     date: Optional[int]
     chat: Optional[Chat]
 
 
-@dataclass
-class Update:
+class Update(BaseModel):
     update_id: int
     message: Optional[Message] = None
     callback_query: Optional[CallbackQuery] = None
-    state: Optional[Any] = None
-
-    def set_state(self, state: Any):
-        self.state = state
 
 
-@dataclass
-class ChatMember:
+class ChatMember(BaseModel):
     status: str
     user: User
+
+
+Chat.update_forward_refs()

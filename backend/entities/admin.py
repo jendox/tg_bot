@@ -4,12 +4,12 @@ from typing import Optional
 
 from typing_extensions import NewType
 
-AdminID = NewType("AdminID", int)
+AdminId = NewType("AdminId", int)
 
 
 @dataclass
 class Admin:
-    id: AdminID
+    id: AdminId
     email: str
     password: Optional[str] = None
 

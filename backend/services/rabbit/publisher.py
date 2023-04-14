@@ -5,7 +5,6 @@ import aio_pika
 import aiohttp
 import logging
 
-
 logger = logging.getLogger()
 
 

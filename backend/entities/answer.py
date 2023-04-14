@@ -2,11 +2,11 @@ from dataclasses import dataclass
 
 from typing_extensions import NewType
 
-AnswerID = NewType("AnswerID", int)
+AnswerId = NewType("AnswerId", int)
 
 
 @dataclass
 class Answer:
-    id: AnswerID
+    id: AnswerId
     title: str
     score: int
